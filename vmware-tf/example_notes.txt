@@ -1,0 +1,19 @@
+terraform init
+ls -la
+terraform fmt
+terraform validate
+terraform apply -var "vsphere_password=Calvin23!"
+
+terraform refresh -var "vsphere_password=Calvin23!"
+
+terraform destroy -var "vsphere_password=Calvin23!"
+
+
+CHALLENGE 01 - Our VM is being reported as finished before an IP address is applied (this is why the output is initially reported as an empty list). Review the configuration, see if you can tweak the code so that Terraform waits until an IP address is assigned before reporting the creation has completed.
+
+SOLUTION 01 - Comment out the following lines within the resource block of main.tf. This will add an additional minute or so to your build time; estimated build time ~3m36s
+
+
+  //wait_for_guest_net_timeout = -1
+  //wait_for_guest_ip_timeout  = -1
+
