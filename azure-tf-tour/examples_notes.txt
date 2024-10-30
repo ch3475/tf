@@ -1,0 +1,74 @@
+Initialize our directory with the terraform init command.
+
+student@bchd:~/mycode/azure-tf-tour$ terraform init
+
+Run the terraform apply command to apply the configuration. All files ending in *.tf will be targeted.
+
+student@bchd:~/mycode/azure-tf-tour$ terraform apply
+
+Type yes to create the resource group.
+
+The build should be successful.
+
+Answer the following questions:
+
+Q: Are the names of the files important?
+A: No, they only need to be in the same directory and end with the extension ".tf"
+Q: What is a "provider block"?
+A: The provider block configures the specified provider, in this case azurerm. A provider is a plugin that Terraform uses to create and manage your resources. You can define multiple provider blocks in a Terraform configuration to manage resources from different providers.
+Q: Why would a developer describe a "resource block"?
+A: Use resource blocks to define components of your infrastructure. A resource might be a physical component such as a server, or it can be a logical resource such as a Heroku application. Resource blocks have two strings before the block: the resource type and the resource name. In this example, the resource type is azurerm_resource_group and the name is rg. The prefix of the type maps to the name of the provider. In the example configuration, Terraform manages the azurerm_resource_group resource with the azurerm provider.
+Inspect the state using terraform show this command examines the contents of "terraform.tfstate"
+
+student@bchd:~/mycode/azure-tf-tour$ terraform show
+
+Sometimes we have a long state file and just want to display the resources we are managing. Use the terraform state list command to see what is currently created.
+
+student@bchd:~/mycode/azure-tf-tour$ terraform state list
+
+Take a moment and appreciate the lack of specialized knowledge we need to successfully build into the Azure cloud. To create a new Azure VNet, you have to specify the name of the resource group to contain the VNet. By referencing the resource group, you establish a dependency between the resources. However, it is Terraform that ensures resources are created in proper order.
+
+CHALLENGE 01 - Update your configuration to use an input variable to describe azurerm_virtual_network.vnet.name. Define the variable within a variable block inside of variables.tf
+
+CHALLENGE 02 - Update your solution to output some interesting data, such as azurerm_resource_group.rg.id. Place this output within outputs.tf. NOTE: If you would like to add other outputs, review the usage of each resource on their documentation page, or use "terraform show" to reveal available outputs.
+
+It is important that you clean up with the terraform destroy command! It is unwise to leave infrastructure running if you're not using it.
+
+student@bchd:~/mycode/azure-tf-tour$ terraform destroy
+
+That's it for this lab. Before you do an SCM commit, it is important to create a .gitignore file. This file describes the files we want git to ignore.
+
+student@bchd:~/mycode/ansible-tf$ vim ~/mycode/.gitignore
+
+Create the following. Any un-commented lines describe directories or files we want to ignore during the commit process. We want to ignore our state files because they might contain secrets:
+
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# Ignore any .tfvars files that are generated automatically for each Terraform run. Most
+# .tfvars files are managed as part of configuration and so should be included in
+# version control.
+#
+# example.tfvars
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Include override files you do wish to add to version control using negated pattern
+#
+# !example_override.tf
+
+# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+# example: *tfplan*
